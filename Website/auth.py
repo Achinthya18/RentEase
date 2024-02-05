@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template,request,flash
 auth= Blueprint('auth',__name__)
-
+@auth.route('/base')
+def base():
+    return render_template('base.html')
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -23,3 +25,6 @@ def signup():
             #add user to the database
             flash('Account created!', category='success')
     return render_template('signup.html')
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('login.html')
