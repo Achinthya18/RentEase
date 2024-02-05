@@ -1,50 +1,70 @@
-{% extends "base.html" %}
+<!doctype html>
+<html data-theme="winter">
 
-{% block content %}
-<form class="card-body" method="POST">
-    <div class="form-control">
-        <label class="label">
-            <span class="label-text">First Name</span>
-        </label>
-        <input type="text" placeholder="Enter First Name" class="input input-bordered" id="firstName"
-            required />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="navbar bg-base-300">
+        <img src="https://cdn.hugeicons.com/icons/home-03-stroke-rounded.svg" alt="home-03" width="24" height="24" />
+        <a class="btn btn-ghost text-xl">Rentease</a>
     </div>
-    <div class="form-control">
-        <label class="label">
-            <span class="label-text">Last Name</span>
-        </label>
-        <input type="text" placeholder="Enter Last Name" class="input input-bordered" id="lastName"
-            required />
+    <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content flex-col lg:flex-row-reverse">
+            <div class="text-center lg:text-left">
+                <h1 class="text-5xl font-bold">Sign Up!</h1>
+                <p class="py-6">Streamlining rental management with ease, efficiency, and peace of mind.</p>
+            </div>
+            <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+                <form class="card-body">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">First Name</span>
+                        </label>
+                        <input type="text" placeholder="Enter First Name" class="input input-bordered" id="firstName" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Last Name</span>
+                        </label>
+                        <input type="text" placeholder="Enter Last Name" class="input input-bordered" id="lastName" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Email</span>
+                        </label>
+                        <input type="email" placeholder="Enter email" class="input input-bordered" id="email" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Phone Number</span>
+                        </label>
+                        <input type="tel" placeholder="Enter Phone Number" class="input input-bordered" id="phoneNumber" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Password</span>
+                        </label>
+                        <input type="password" placeholder="Enter Password" class="input input-bordered" id="password1" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Confirm Password</span>
+                        </label>
+                        <input type="password" placeholder="Confirm Password" class="input input-bordered" id="" required />
+                    </div>
+                    <div class="form-control">
+                        <button class="btn btn-primary">Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-control">
-        <label class="label">
-            <span class="label-text">Email</span>
-        </label>
-        <input type="email" placeholder="Enter email" class="input input-bordered" id="email" required />
-    </div>
-    <div class="form-control">
-        <label class="label">
-            <span class="label-text">Phone Number</span>
-        </label>
-        <input type="tel" placeholder="Enter Phone Number" class="input input-bordered" id="phoneNumber"
-            required />
-    </div>
-    <div class="form-control">
-        <label class="label">
-            <span class="label-text">Password</span>
-        </label>
-        <input type="password" placeholder="Enter Password" class="input input-bordered" id="password1"
-            required />
-    </div>
-    <div class="form-control">
-        <label class="label">
-            <span class="label-text">Confirm Password</span>
-        </label>
-        <input type="password" placeholder="Confirm Password" class="input input-bordered" id="password2"
-            required />
-    </div>
-    <div class="form-control">
-        <button class="btn btn-primary">Sign Up</button>
-    </div>
-</form>
-{% endblock %}
+</body>
+
+</html>
