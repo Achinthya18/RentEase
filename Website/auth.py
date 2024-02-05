@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from flask import Blueprint, render_template,request,flash
 auth= Blueprint('auth',__name__)
 
@@ -23,11 +22,4 @@ def signup():
         else:
             #add user to the database
             flash('Account created!', category='success')
-
-=======
-from flask import Blueprint,render_template
-auth= Blueprint('auth',__name__)
-@auth.route('/signup')
-def signup():
->>>>>>> fa202abd1ba17aeccc750b6fdd7ed698f2882219
     return render_template('signup.html')
