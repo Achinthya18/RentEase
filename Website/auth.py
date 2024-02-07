@@ -3,7 +3,7 @@ import mysql.connector
 try:
     conn=mysql.connector.connect(
         user='root',
-        password='',
+        password='72aezakmi36',
         host='localhost',
         port='3306'
     )
@@ -12,7 +12,7 @@ try:
 except:
     print("issues with connection")
 cur=conn.cursor()
-cur.execute("use test")
+cur.execute("use rentalmange")
 auth= Blueprint('auth',__name__)
 @auth.route('/base')
 def base():
@@ -40,7 +40,7 @@ def signup():
             flash('Passwords do not match.', category='error')
         elif not password1.isalnum():
             flash('Password must contain only alphanumeric characters.', category='error')
-        elif not (phoneNumber.isdigit() and len(phoneNumber) != 10):
+        elif not (phoneNumber.isdigit() ):
             flash('Phone Number must contain only digits.', category='error')
         else:
             # Input Sanitization and Database Operation
@@ -55,12 +55,30 @@ def signup():
                 flash(f'An error occurred: {str(e)}', category='error')
                 conn.rollback()
     return render_template('signup.html')
+@auth.route('/home', methods=['GET', 'POST'])
+def home():
+    return render_template('home.html')
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    data=request.form
-    print(data)
-    email=request.form.get('email')
-    
-    paswd=request.form.get('password')
-    
+    if request.method == 'POST':
+        email = request.form.get('email') 
+        paswd = request.form.get('password')
+        sql = '''
+                SELECT LPassword
+                FROM Landlord
+                WHERE LEmail = %s
+            '''
+        try:
+            cur.execute(sql, (email,))
+            data = cur.fetchone()
+            if data:
+                if data[0] == paswd:
+                    flash('Login success', category='success')
+                else:
+                    flash('The entered password is incorrect', category='error')
+            else:
+                flash('The email id doesn\'t exist', category='error')
+        except Exception as e:
+            flash(str(e), category='error')
+
     return render_template('login.html')
