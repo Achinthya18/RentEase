@@ -3,7 +3,7 @@ import mysql.connector
 try:
     conn=mysql.connector.connect(
         user='root',
-        password='72aezakmi36',
+        password='',
         host='localhost',
         port='3306'
     )
@@ -12,7 +12,7 @@ try:
 except:
     print("issues with connection")
 cur=conn.cursor()
-cur.execute("use rentalmange")
+cur.execute("")
 auth= Blueprint('auth',__name__)
 @auth.route('/base')
 def base():
