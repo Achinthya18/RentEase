@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,request,flash
+from flask import Blueprint, render_template,request,flash,redirect
 import mysql.connector
 try:
     conn=mysql.connector.connect(
@@ -74,11 +74,16 @@ def login():
             if data:
                 if data[0] == paswd:
                     flash('Login success', category='success')
+                    return redirect('/home')
                 else:
                     flash('The entered password is incorrect', category='error')
+                    
             else:
                 flash('The email id doesn\'t exist', category='error')
         except Exception as e:
             flash(str(e), category='error')
 
     return render_template('login.html')
+@auth.route('/about', methods=['GET', 'POST'])
+def about():
+    return render_template('about.html')

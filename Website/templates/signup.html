@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    {% include "navbar0.html" %}
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
@@ -23,11 +24,6 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-
-    <div class="sticky top-0 z-50 glass navbar bg-base-300">
-        <img src="https://cdn.hugeicons.com/icons/home-03-stroke-rounded.svg" alt="home-03" width="24" height="24" />
-        <a class="btn btn-ghost text-xl ml-2" href="/base">Rentease</a>
-    </div>
     <div class="hero min-h-screen bg-base-200">
         <div class="hero-content flex-col lg:flex-row-reverse">
             <div class="text-center lg:text-left">
