@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="winter">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RentEase</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    {% include "navbar.html" %}
+    <div class="container mx-auto mt-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out">
+          <div class="col-span-1 md:col-span-2">
+            <!-- Your content goes here -->
+            <h2 class="text-2xl font-bold mb-4">Wide Area Title</h2>
+            <p class="text-base text-gray-700">Effortlessly collect tenant information with our user-friendly form for landlords. Simplify record-keeping and streamline communication with our secure online platform</p>
+          </div>
+           <div class="card shrink-0 w-full  shadow-2xl bg-base-100">
+                <form class="card-body" method="post">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">First Name</span>
+                        </label>
+                        <input type="text" placeholder="Enter First Name" class="input input-bordered" id="firstName"
+                            name="firstName" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Last Name</span>
+                        </label>
+                        <input type="text" placeholder="Enter Last Name" class="input input-bordered" id="lastName"
+                            name="lastName" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Email</span>
+                        </label>
+                        <input type="email" placeholder="Enter email" class="input input-bordered" id="email"
+                            name="email" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Phone Number</span>
+                        </label>
+                        <input type="tel" placeholder="Enter Phone Number" class="input input-bordered" id="phoneNumber"
+                            name="phoneNumber" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Address</span>
+                        </label>
+                        <input type="text" placeholder="Enter Address" class="input input-bordered" id="address"
+                            name="address" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Password</span>
+                        </label>
+                        <input type="password" placeholder="Enter Password" class="input input-bordered" id="password1"
+                            name="password1" required />
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Confirm Password</span>
+                        </label>
+                        <input type="password" placeholder="Confirm Password" class="input input-bordered" id="password"
+                            name="password" required />
+                    </div>
+                    <div class="form-control">
+                        <button class="btn btn-primary" href="/home">Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </div>
+      
+</body>
+
+</html>

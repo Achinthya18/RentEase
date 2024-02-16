@@ -12,7 +12,7 @@ try:
 except:
     print("issues with connection")
 cur=conn.cursor()
-cur.execute("")
+cur.execute("use rentalManagement")
 auth= Blueprint('auth',__name__)
 @auth.route('/base')
 def base():
@@ -51,6 +51,7 @@ def signup():
                             (firstName, lastName, email, phoneNumber, address, password1))
                 conn.commit()
                 flash('Account created successfully!', category='success')
+                
             except Exception as e:
                 flash(f'An error occurred: {str(e)}', category='error')
                 conn.rollback()
@@ -73,7 +74,6 @@ def login():
             data = cur.fetchone()
             if data:
                 if data[0] == paswd:
-                    flash('Login success', category='success')
                     return redirect('/home')
                 else:
                     flash('The entered password is incorrect', category='error')
@@ -87,3 +87,6 @@ def login():
 @auth.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
+@auth.route('/tenantform',methods=['GET','POST'])
+def tenantform():
+    return render_template('tenantform.html')
