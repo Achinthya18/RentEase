@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,request,flash,redirect
+from flask import Blueprint, render_template,request,flash,redirect,session
 import mysql.connector
 try:
     conn=mysql.connector.connect(
@@ -50,7 +50,11 @@ def signup():
                                 VALUES (%s, %s, %s, %s, %s, %s)''',
                             (firstName, lastName, email, phoneNumber, address, password1))
                 conn.commit()
+                cur.execute("SELECT LAST_INSERT_ID();")
+                lid = cur.fetchone()[0]
+                session['lid'] = lid
                 flash('Account created successfully!', category='success')
+                
                 
             except Exception as e:
                 flash(f'An error occurred: {str(e)}', category='error')
@@ -65,7 +69,7 @@ def login():
         email = request.form.get('email') 
         paswd = request.form.get('password')
         sql = '''
-                SELECT LPassword
+                SELECT Lid, LPassword
                 FROM Landlord
                 WHERE LEmail = %s
             '''
@@ -73,20 +77,53 @@ def login():
             cur.execute(sql, (email,))
             data = cur.fetchone()
             if data:
-                if data[0] == paswd:
+                lid, stored_password = data  # Fetch Lid and stored password from database
+                if stored_password == paswd:
+                    session['lid'] = lid  # Store Lid in session
                     return redirect('/home')
                 else:
-                    flash('The entered password is incorrect', category='error')
-                    
+                    flash('The entered password is incorrect', category='error')                 
             else:
                 flash('The email id doesn\'t exist', category='error')
         except Exception as e:
             flash(str(e), category='error')
-
     return render_template('login.html')
 @auth.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
-@auth.route('/tenantform',methods=['GET','POST'])
+@auth.route('/tenantform', methods=['GET', 'POST'])
 def tenantform():
+    if request.method == 'POST':
+        lid = session.get('lid')
+        if lid:
+            PCategory = request.form.get('PCategory')
+            PLocation = request.form.get('PLocation')
+            PCity = request.form.get('PCity')
+            PState = request.form.get('PState')
+            PPin = request.form.get('PPin')
+            print("PCategory:", PCategory)
+            print("PLocation:", PLocation)
+
+            try:
+                # Insert property details into the Property table
+                cur.execute('''INSERT INTO Property
+                                (Lid, PCategory, PLocation, PCity, PState, PPin)
+                                VALUES (%s, %s, %s, %s, %s, %s)''',
+                            (lid, PCategory, PLocation, PCity, PState, PPin))
+                conn.commit()
+                
+                flash('Property details added successfully!', category='success')
+                return redirect('/home')  # Redirect to home page after successful insertion
+            except Exception as e:
+                flash(f'An error occurred: {str(e)}', category='error')
+                conn.rollback()
+        else:
+            flash('Landlord ID not found in session.', category='error')
+
     return render_template('tenantform.html')
+@auth.route('/logout', methods=['GET', 'POST'])
+def logout():
+    # Remove the user's session data
+    session.clear()
+    # Redirect the user to the login page (or any other page you prefer)
+    return redirect('/base')
