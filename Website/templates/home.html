@@ -19,6 +19,21 @@
         d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
         stroke="#2563EB" stroke-width="1.5" />
     </svg></a>
+    <div class="property-container">
+      {% for property in properties %}
+      <div class="card lg:card-side bg-base-100 shadow-xl mr-40 ml-40 mt-10">
+        <figure><img src="https://daisyui.com/images/stock/photo-1494232410401-ad00d5433cfa.jpg" alt="Album"/></figure>
+        <div class="card-body">
+          <h2 class="card-title">{{ property[1]}}</h2>
+          <p>Located at: {{ property[3] }}, {{ property[4] }}, {{ property[5] }}</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-outline btn-primary m-3">See Tenants</button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
 
 </body>
 

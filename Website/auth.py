@@ -62,6 +62,20 @@ def signup():
     return render_template('signup.html')
 @auth.route('/home', methods=['GET', 'POST'])
 def home():
+    # Retrieve the landlord ID from the session
+    lid = session.get('lid')
+    if lid:
+            # Fetch all properties associated with the current landlord
+            cur.execute('''SELECT *
+                            FROM Property
+                            WHERE Lid = %s''', (lid,))
+            properties = cur.fetchall()
+            if properties:
+                print(properties[0])
+            # Pass the fetched properties to the template for rendering
+                return render_template('home.html', properties=properties)
+    else:
+        flash('Landlord ID not found in session.', category='error')
     return render_template('home.html')
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
