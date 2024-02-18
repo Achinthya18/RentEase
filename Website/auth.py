@@ -13,7 +13,7 @@ except:
     print("issues with connection")
 cur=conn.cursor()
 cur.execute("use rentalManagement")
-auth= Blueprint('auth',__name__)
+auth= Blueprint('auth',__name__, static_folder='static')
 @auth.route('/base')
 def base():
     return render_template('base.html')
@@ -142,10 +142,11 @@ def tenantpage(pid):
     session['pid'] = pid
 
     # Query the database to fetch updated tenant data based on pid
-    cur.execute('''SELECT TFname, TLname, Rent, PaymentStatus, PayDate
+    cur.execute('''SELECT TFname, TLname, Rent, PaymentStatus, PayDate , Tenant.Tid , Lid
                     FROM Tenant
                     JOIN Rent ON Tenant.Tid = Rent.Tid
-                    WHERE Pid = %s''', (pid,))
+                    WHERE Pid = %s
+                    ORDER BY PayDate''', (pid,))
     tenant_data = cur.fetchall()
 
     cur.execute('''SELECT *
@@ -155,7 +156,27 @@ def tenantpage(pid):
 
     # Pass tenant data and property details to the template for rendering
     return render_template('tenantpage.html', tenant_data=tenant_data, property_details=property_details)
+@auth.route('/sortdate', methods=['GET', 'POST'])
+def sortdate():
+    return redirect(url_for('auth.tenantpage', pid=session['pid']))
+@auth.route('/sortname', methods=['GET', 'POST'])
+def sortname():
+    pid=session['pid']
+    # Query the database to fetch updated tenant data based on pid
+    cur.execute('''SELECT TFname, TLname, Rent, PaymentStatus, PayDate
+                    FROM Tenant
+                    JOIN Rent ON Tenant.Tid = Rent.Tid
+                    WHERE Pid = %s
+                    ORDER BY TFName''', (pid,))
+    tenant_data = cur.fetchall()
 
+    cur.execute('''SELECT *
+                    FROM Property
+                    WHERE Pid = %s''', (pid,))
+    property_details = cur.fetchone()
+
+    # Pass tenant data and property details to the template for rendering
+    return render_template('tenantpage.html', tenant_data=tenant_data, property_details=property_details)
 @auth.route('/tenantform', methods=['GET', 'POST'])
 def tenantform():
     if request.method == 'POST':
@@ -207,36 +228,56 @@ def logout():
     # Redirect the user to the login page (or any other page you prefer)
     return redirect('/base')
 
-@auth.route('/updatetenant', methods=['GET', 'POST'])
-def updatetenant():
+
+@auth.route('/<int:tid>/<int:lid>/deletetenant', methods=['GET', 'POST'])
+def deletetenant(tid, lid):
+        print(tid)
+        print(lid)
+        try:
+            # Delete Tenant from Tenant table
+            cur.execute('''DELETE FROM Tenant
+                            WHERE Tid = %s''',
+                        (tid,))
+            conn.commit()
+            print(tid)
+            print(lid)
+
+            # Delete corresponding rental information from Rent table
+            cur.execute('''DELETE FROM Rent
+                            WHERE Tid = %s''',
+                        (lid,))
+            conn.commit()
+            flash('Tenant deleted successfully!', category='success')
+            # Redirect to tenant page after successful deletion  
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', category='error')
+            conn.rollback()
+
+    # If the request method is GET, render the confirmation page for tenant deletion
+    # You can have a confirmation page or directly perform the deletion via JavaScript confirmation
+        return redirect(url_for('auth.tenantpage', pid=session['pid'])) 
+@auth.route('/<int:tid>/<int:lid>/updatetenant', methods=['GET', 'POST'])
+def updatetenant(tid, lid):
     if request.method == 'POST':
         # Retrieve updated information from the form
         payment_status = request.form.get('UpdatedPaymentStatus')
         payment_date = request.form.get('UpdatedPayDate')
-        tid = request.form.get('tid')  # Assuming you have a hidden input field in the form containing the tenant ID
-
+        payment_rent=request.form.get('UpdatedRent')
+        print(payment_date,payment_rent,payment_status)
+        print(tid)
         try:
             # Update Tenant table
-            cur.execute('''UPDATE Tenant
-                            SET PaymentStatus = %s
-                            WHERE Tid = %s''',
-                        (payment_status, tid))
-            conn.commit()
-
             # Update Rent table
             cur.execute('''UPDATE Rent
-                            SET PaymentStatus = %s, PayDate = %s
+                            SET PaymentStatus = %s, PayDate = %s,rent=%s
                             WHERE Tid = %s''',
-                        (payment_status, payment_date, tid))
+                        (payment_status, payment_date, payment_rent, tid))
             conn.commit()
-
+            print(payment_date,payment_rent,payment_status)
             flash('Tenant information updated successfully!', category='success')
             # Redirect to tenant page with the updated information
             return redirect(url_for('auth.tenantpage', pid=session['pid']))  
         except Exception as e:
             flash(f'An error occurred: {str(e)}', category='error')
             conn.rollback()
-
-    # If the request method is GET, render the update tenant form
-    tenant_name = request.args.get('tenant_name')
-    return render_template('updatetenant.html', tenant_name=tenant_name)
+    return render_template('updatetenant.html')

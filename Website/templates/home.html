@@ -22,7 +22,10 @@
     <div class="property-container">
       {% for property in properties %}
       <div class="card lg:card-side bg-base-100 shadow-xl mr-16 ml-16 mt-10 mb-10">
-        <figure><img src="https://daisyui.com/images/stock/photo-1494232410401-ad00d5433cfa.jpg" alt="Album"/></figure>
+        <figure>
+          <img src="{{ url_for('static', filename='property.jpeg') }}" alt="Album" class="h-80 w-140"/>
+      </figure>
+      
         <div class="card-body">
           <h2 class="card-title">{{ property[1]}}</h2>
           <p>Located at: {{ property[3] }}, {{ property[4] }}, {{ property[5] }}</p>

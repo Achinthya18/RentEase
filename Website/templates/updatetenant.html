@@ -9,7 +9,7 @@
 </head>
 <body>
     {% include "navbar1.html" %}
-    <form class="card-body" method="post" action="/tenantpage">
+    <form class="card-body" method="post">
         <h2 class="text-2xl font-bold mb-4 mt-8">Update Tenant Info</h2>
         <h3 class="text-lg font-semibold mb-4">Current Tenant: {{ tenant_name }}</h3>
         <div class="form-control">
@@ -27,7 +27,14 @@
             </label>
             <input type="date" class="input input-bordered" id="UpdatedPayDate" name="UpdatedPayDate" required />
         </div>
-        <button class="btn btn-outline btn-md" href="/tenantpage">Update
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Rent</span>
+            </label>
+            <input type="text" placeholder="Enter Rent" class="input input-bordered" id="UpdatedRent" name="UpdatedRent"
+                required />
+        </div>
+        <button class="btn btn-outline btn-md" href="/updatetenant">Update
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                 fill="none">
                 <path d="M20 12L4 12" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"
