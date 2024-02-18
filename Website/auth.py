@@ -3,7 +3,7 @@ import mysql.connector
 try:
     conn=mysql.connector.connect(
         user='root',
-        password='',
+        password='72aezakmi36',
         host='localhost',
         port='3306'
     )
@@ -53,11 +53,7 @@ def signup():
                 cur.execute("SELECT LAST_INSERT_ID();")
                 lid = cur.fetchone()[0]
                 session['lid'] = lid
-                flash('Account created successfully!', category='success')
-                
-                
             except Exception as e:
-                flash(f'An error occurred: {str(e)}', category='error')
                 conn.rollback()
     return render_template('signup.html')
 
@@ -75,8 +71,6 @@ def home():
                 print(properties[0])
             # Pass the fetched properties to the template for rendering
                 return render_template('home.html', properties=properties)
-    else:
-        flash('Landlord ID not found in session.', category='error')
     return render_template('home.html')
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -128,13 +122,9 @@ def propertyform():
                             (lid, PCategory, PLocation, PCity, PState, PPin))
                 conn.commit()
                 
-                flash('Property details added successfully!', category='success')
                 return redirect('/home')  # Redirect to home page after successful insertion
             except Exception as e:
-                flash(f'An error occurred: {str(e)}', category='error')
                 conn.rollback()
-        else:
-            flash('Landlord ID not found in session.', category='error')
     return render_template('propertyform.html')
 
 @auth.route('/<int:pid>/tenantpage', methods=['GET', 'POST'])
@@ -211,10 +201,8 @@ def tenantform():
                         (session.get('lid'), tid, Deposit, Rent, PaymentStatus, PayDate))
             conn.commit()
 
-            flash('Tenant and Rental details added successfully!', category='success')
             return redirect(url_for('auth.tenantpage', pid=session['pid'])) # Redirect to home page after successful insertion
         except Exception as e:
-            flash(f'An error occurred: {str(e)}', category='error')
             conn.rollback()
 
     return render_template('tenantform.html')
@@ -247,10 +235,8 @@ def deletetenant(tid, lid):
                             WHERE Tid = %s''',
                         (lid,))
             conn.commit()
-            flash('Tenant deleted successfully!', category='success')
             # Redirect to tenant page after successful deletion  
         except Exception as e:
-            flash(f'An error occurred: {str(e)}', category='error')
             conn.rollback()
 
     # If the request method is GET, render the confirmation page for tenant deletion
@@ -274,11 +260,9 @@ def updatetenant(tid, lid):
                         (payment_status, payment_date, payment_rent, tid))
             conn.commit()
             print(payment_date,payment_rent,payment_status)
-            flash('Tenant information updated successfully!', category='success')
             # Redirect to tenant page with the updated information
             return redirect(url_for('auth.tenantpage', pid=session['pid']))  
         except Exception as e:
-            flash(f'An error occurred: {str(e)}', category='error')
             conn.rollback()
     return render_template('updatetenant.html')
 
