@@ -71,6 +71,10 @@ def home():
                             WHERE Lid = %s''', (lid,))
             properties = cur.fetchall()
             if properties:
+<<<<<<< HEAD
+=======
+                print(properties[0])
+>>>>>>> 33a54611bc30845133b67c38eb64cea31c3f770f
             # Pass the fetched properties to the template for rendering
                 return render_template('home.html', properties=properties)
     else:
