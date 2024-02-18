@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RentEase</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -88,7 +89,7 @@
                         <input type="date" class="input input-bordered" id="PayDate" name="PayDate" required />
                     </div>
                     <div class="form-control">
-                        <a class="btn btn-primary mr-40 ml-40 mb-2" href="/goback">Cancel
+                        <a class="btn btn-primary mr-40 ml-40 mb-2" href="/canceltotenantpage">Cancel
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 24"
                                 fill="none">
                                 <path d="M15.7494 15L9.75 9M9.75064 15L15.75 9" stroke="#ffffff" stroke-width="1.5"
@@ -98,7 +99,7 @@
                                     stroke="#ffffff" stroke-width="1.5" />
                             </svg>
                         </a>
-                        <button class="btn btn-primary  mr-40 ml-40   " href="/home">Next
+                        <button class="btn btn-primary  mr-40 ml-40   " href="/home">Add Tenant
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none">
                                 <path d="M20 12L4 12" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"

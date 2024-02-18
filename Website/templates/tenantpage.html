@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RentEase</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -34,7 +35,7 @@
         {% for tenant in tenant_data %}
         <div class="card rounded-lg shadow-lg">
             <div class="card-body">
-                <figure><img src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Album"
+                <figure><img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Album"
                         class="w-24 h-24 rounded-full object-cover" /></figure>
                 <h2 class="card-title text-xl">{{ tenant[0]}} {{ tenant[1] }}</h2>
                 <p>Rent: {{ tenant[2] }}</p>

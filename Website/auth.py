@@ -281,3 +281,21 @@ def updatetenant(tid, lid):
             flash(f'An error occurred: {str(e)}', category='error')
             conn.rollback()
     return render_template('updatetenant.html')
+
+@auth.route('/delete', methods=['GET', 'POST'])
+def delete():
+    lid = session['lid']
+    
+    try:
+        # Delete Landlord from Landlord table
+        cur.execute('''DELETE FROM Landlord
+                        WHERE Lid = %s''',
+                    (lid,))
+        conn.commit() 
+    except Exception as e:
+        conn.rollback()
+    return redirect('/base')
+
+@auth.route('/canceltotenantpage',methods=['GET', 'POST'])
+def cancel():
+    return redirect(url_for('auth.tenantpage', pid=session['pid']))
