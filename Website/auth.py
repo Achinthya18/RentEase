@@ -60,6 +60,7 @@ def signup():
                 flash(f'An error occurred: {str(e)}', category='error')
                 conn.rollback()
     return render_template('signup.html')
+
 @auth.route('/home', methods=['GET', 'POST'])
 def home():
     # Retrieve the landlord ID from the session
@@ -77,6 +78,7 @@ def home():
     else:
         flash('Landlord ID not found in session.', category='error')
     return render_template('home.html')
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -102,9 +104,11 @@ def login():
         except Exception as e:
             flash(str(e), category='error')
     return render_template('login.html')
+
 @auth.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
+
 @auth.route('/propertyform', methods=['GET', 'POST'])
 def propertyform():
     if request.method == 'POST':
@@ -132,18 +136,26 @@ def propertyform():
         else:
             flash('Landlord ID not found in session.', category='error')
     return render_template('propertyform.html')
+
 @auth.route('/<int:pid>/tenantpage', methods=['GET', 'POST'])
 def tenantpage(pid):
     session['pid'] = pid
 
-    # Query the database to fetch tenant data based on pid
+    # Query the database to fetch updated tenant data based on pid
     cur.execute('''SELECT TFname, TLname, Rent, PaymentStatus, PayDate
                     FROM Tenant
                     JOIN Rent ON Tenant.Tid = Rent.Tid
                     WHERE Pid = %s''', (pid,))
     tenant_data = cur.fetchall()
-    # Pass tenant data to the template for rendering
-    return render_template('tenantpage.html', tenant_data=tenant_data)
+
+    cur.execute('''SELECT *
+                    FROM Property
+                    WHERE Pid = %s''', (pid,))
+    property_details = cur.fetchone()
+
+    # Pass tenant data and property details to the template for rendering
+    return render_template('tenantpage.html', tenant_data=tenant_data, property_details=property_details)
+
 @auth.route('/tenantform', methods=['GET', 'POST'])
 def tenantform():
     if request.method == 'POST':
@@ -194,3 +206,37 @@ def logout():
     session.clear()
     # Redirect the user to the login page (or any other page you prefer)
     return redirect('/base')
+
+@auth.route('/updatetenant', methods=['GET', 'POST'])
+def updatetenant():
+    if request.method == 'POST':
+        # Retrieve updated information from the form
+        payment_status = request.form.get('UpdatedPaymentStatus')
+        payment_date = request.form.get('UpdatedPayDate')
+        tid = request.form.get('tid')  # Assuming you have a hidden input field in the form containing the tenant ID
+
+        try:
+            # Update Tenant table
+            cur.execute('''UPDATE Tenant
+                            SET PaymentStatus = %s
+                            WHERE Tid = %s''',
+                        (payment_status, tid))
+            conn.commit()
+
+            # Update Rent table
+            cur.execute('''UPDATE Rent
+                            SET PaymentStatus = %s, PayDate = %s
+                            WHERE Tid = %s''',
+                        (payment_status, payment_date, tid))
+            conn.commit()
+
+            flash('Tenant information updated successfully!', category='success')
+            # Redirect to tenant page with the updated information
+            return redirect(url_for('auth.tenantpage', pid=session['pid']))  
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', category='error')
+            conn.rollback()
+
+    # If the request method is GET, render the update tenant form
+    tenant_name = request.args.get('tenant_name')
+    return render_template('updatetenant.html', tenant_name=tenant_name)
