@@ -3,66 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RentEase</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.2/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body>
     {% include "navbar.html" %}
     <div class="container mx-auto mt-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out">
           <div class="col-span-1 md:col-span-2">
             <!-- Your content goes here -->
-            <h2 class="text-2xl font-bold mb-4">Property and Tenant Info</h2>
-            <p class="text-base text-gray-700">Please add tenant information along with property details to proceed with adding a new tenant on RentEase.</p>
+            <h2 class="text-2xl font-bold mb-4">Tenant Info</h2>
+            <p class="text-base text-gray-700">Please add Tenant information on RentEase.</p>
           </div>
            <div class="card shrink-0 w-full  shadow-2xl bg-base-100">
-                <form class="card-body" method="post">
+            <form class="card-body" method="post">
+                <!-- ... (existing code) ... -->
+            
+                <!-- Tenant Details -->
+                <h2 class="text-2xl font-bold mb-4 mt-8">Tenant Info</h2>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Tenant First Name</span>
+                    </label>
+                    <input type="text" placeholder="Enter First Name" class="input input-bordered" id="TFname" name="TFname" required />
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Tenant Last Name</span>
+                    </label>
+                    <input type="text" placeholder="Enter Last Name" class="input input-bordered" id="TLname" name="TLname" required />
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Tenant Email</span>
+                    </label>
+                    <input type="email" placeholder="Enter Email" class="input input-bordered" id="TEmail" name="TEmail" required />
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Tenant Phone</span>
+                    </label>
+                    <input type="text" placeholder="Enter Phone" class="input input-bordered" id="TPhone" name="TPhone" required />
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Date of Contract (DOC)</span>
+                    </label>
+                    <input type="date" class="input input-bordered" id="DOC" name="DOC" required />
+                </div>
+                <h2 class="text-2xl font-bold mb-4 mt-8">Rental Info</h2>
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Deposit</span>
+        </label>
+        <input type="text" placeholder="Enter Deposit" class="input input-bordered" id="Deposit" name="Deposit" required />
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Rent</span>
+        </label>
+        <input type="text" placeholder="Enter Rent" class="input input-bordered" id="Rent" name="Rent" required />
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Payment Status</span>
+        </label>
+        <select class="select select-bordered" id="PaymentStatus" name="PaymentStatus" required>
+            <option value="Paid">Paid</option>
+            <option value="Unpaid">Unpaid</option>
+        </select>
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Payment Date</span>
+        </label>
+        <input type="date" class="input input-bordered" id="PayDate" name="PayDate" required />
+    </div>
                     <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">Property Category</span>
-                        </label>
-                        <input type="text" placeholder="Enter Category" class="input input-bordered" id="PCategory"
-                            name="PCategory" required />
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">Neighbourhood</span>
-                        </label>
-                        <input type="text" placeholder="Enter Neighbourhood" class="input input-bordered" id="PLocation"
-                            name="PLocation" required />
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">City</span>
-                        </label>
-                        <input type="text" placeholder="Enter City" class="input input-bordered" id="PCity"
-                            name="PCity" required />
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">State</span>
-                        </label>
-                        <input type="text" placeholder="Enter State" class="input input-bordered" id="PState"
-                            name="PState" required />
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">Pin-Code</span>
-                        </label>
-                        <input type="text" placeholder="Enter Pin" class="input input-bordered" id="PPin"
-                            name="PPin" required />
-                    </div>
-
-                    <div class="form-control">
-                        <a class="btn btn-primary mr-40 ml-40 mb-2" href="/tenantform" >Cancel 
+                        <a class="btn btn-primary mr-40 ml-40 mb-2" href="/goback" >Cancel 
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 24" fill="none">
                                 <path d="M15.7494 15L9.75 9M9.75064 15L15.75 9" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M22.75 12C22.75 6.47715 18.2728 2 12.75 2C7.22715 2 2.75 6.47715 2.75 12C2.75 17.5228 7.22715 22 12.75 22C18.2728 22 22.75 17.5228 22.75 12Z" stroke="#ffffff" stroke-width="1.5"/>
                             </svg>
-
-                        </a>
+                            </a>
                         <button class="btn btn-primary  mr-40 ml-40   "href="/home">Next
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
                                 <path d="M20 12L4 12" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -74,7 +98,5 @@
             </div>
         </div>
       </div>
-      
 </body>
-
 </html>

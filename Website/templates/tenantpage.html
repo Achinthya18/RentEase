@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="winter">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    {% include "navbar.html" %}
+    <a class="btn btn-outline btn-primary m-3" href="/tenantform" >
+        Add Tenant
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M12 8V16M16 12L8 12" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path
+            d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
+            stroke="#2563EB" stroke-width="1.5" />
+        </svg></a>
+
+        <h1>Tenant Data</h1>
+
+<table>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Rent</th>
+        <th>Payment Status</th>
+        <th>Payment Date</th>
+    </tr>
+    {% for tenant in tenant_data %}
+    <tr>
+        <td>{{ tenant[0] }}</td>
+        <td>{{ tenant[1] }}</td>
+        <td>{{ tenant[2]}}</td>
+        <td>{{ tenant[3] }}</td>
+        <td>{{ tenant[4] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

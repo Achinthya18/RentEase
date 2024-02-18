@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template,request,flash,redirect,session
+from flask import Blueprint, render_template,request,flash,redirect,session,url_for
 import mysql.connector
 try:
     conn=mysql.connector.connect(
         user='root',
-        password='',
+        password='72aezakmi36',
         host='localhost',
         port='3306'
     )
@@ -62,6 +62,19 @@ def signup():
     return render_template('signup.html')
 @auth.route('/home', methods=['GET', 'POST'])
 def home():
+    # Retrieve the landlord ID from the session
+    lid = session.get('lid')
+    if lid:
+            # Fetch all properties associated with the current landlord
+            cur.execute('''SELECT *
+                            FROM Property
+                            WHERE Lid = %s''', (lid,))
+            properties = cur.fetchall()
+            if properties:
+            # Pass the fetched properties to the template for rendering
+                return render_template('home.html', properties=properties)
+    else:
+        flash('Landlord ID not found in session.', category='error')
     return render_template('home.html')
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -91,8 +104,8 @@ def login():
 @auth.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
-@auth.route('/tenantform', methods=['GET', 'POST'])
-def tenantform():
+@auth.route('/propertyform', methods=['GET', 'POST'])
+def propertyform():
     if request.method == 'POST':
         lid = session.get('lid')
         if lid:
@@ -101,8 +114,6 @@ def tenantform():
             PCity = request.form.get('PCity')
             PState = request.form.get('PState')
             PPin = request.form.get('PPin')
-            print("PCategory:", PCategory)
-            print("PLocation:", PLocation)
 
             try:
                 # Insert property details into the Property table
@@ -119,8 +130,63 @@ def tenantform():
                 conn.rollback()
         else:
             flash('Landlord ID not found in session.', category='error')
+    return render_template('propertyform.html')
+@auth.route('/<int:pid>/tenantpage', methods=['GET', 'POST'])
+def tenantpage(pid):
+    session['pid'] = pid
+
+    # Query the database to fetch tenant data based on pid
+    cur.execute('''SELECT TFname, TLname, Rent, PaymentStatus, PayDate
+                    FROM Tenant
+                    JOIN Rent ON Tenant.Tid = Rent.Tid
+                    WHERE Pid = %s''', (pid,))
+    tenant_data = cur.fetchall()
+    # Pass tenant data to the template for rendering
+    return render_template('tenantpage.html', tenant_data=tenant_data)
+@auth.route('/tenantform', methods=['GET', 'POST'])
+def tenantform():
+    if request.method == 'POST':
+        pid = session['pid']  # Assuming you have a way to get the property ID
+        TFname = request.form.get('TFname')
+        TLname = request.form.get('TLname')
+        TEmail = request.form.get('TEmail')
+        TPhone = request.form.get('TPhone')
+        DOC = request.form.get('DOC')
+
+        Deposit = request.form.get('Deposit')
+        Rent = request.form.get('Rent')
+        PaymentStatus = request.form.get('PaymentStatus')
+        PayDate = request.form.get('PayDate')
+
+        try:
+            # Insert Tenant details into the Tenant table
+            cur.execute('''INSERT INTO Tenant
+                            (TFname, TLname, TEmail, TPhone, DOC, Pid)
+                            VALUES (%s, %s, %s, %s, %s, %s)''',
+                        (TFname, TLname, TEmail, TPhone, DOC, pid))
+            conn.commit()
+
+            # Get the Tid of the newly inserted Tenant
+            cur.execute('SELECT LAST_INSERT_ID()')
+            tid = cur.fetchone()[0]
+
+            # Insert Rental details into the Rent table
+            cur.execute('''INSERT INTO Rent
+                            (Lid, Tid, Deposit, Rent, PaymentStatus, PayDate)
+                            VALUES (%s, %s, %s, %s, %s, %s)''',
+                        (session.get('lid'), tid, Deposit, Rent, PaymentStatus, PayDate))
+            conn.commit()
+
+            flash('Tenant and Rental details added successfully!', category='success')
+            return redirect(url_for('auth.tenantpage', pid=session['pid'])) # Redirect to home page after successful insertion
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', category='error')
+            conn.rollback()
 
     return render_template('tenantform.html')
+
+
+
 @auth.route('/logout', methods=['GET', 'POST'])
 def logout():
     # Remove the user's session data
