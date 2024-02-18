@@ -7,91 +7,51 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px; /* Added margin-top */
-        }
-        th, td {
-            padding: 8px; /* Adjust the padding as per your preference */
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        /* Added styles for property-details */
-        .property-details {
-            margin: 20px; /* Adjust margin as needed */
-            padding: 10px; /* Adjust padding as needed */
-            border: 1px solid #ddd; /* Add border for clarity */
-            border-radius: 8px; /* Add border-radius for rounded corners */
-            background-color: #f9f9f9; /* Adjust background color as needed */
-        }
-        .property-details h2 {
-            margin-bottom: 10px; /* Adjust margin-bottom as needed */
-        }
-        .property-card {
-            display: flex;
-            align-items: center;
-        }
-        .property-card img {
-            max-width: 100px; /* Adjust max-width as needed */
-            margin-right: 20px; /* Adjust margin-right as needed */
-        }
-        .property-card .card-body {
-            flex-grow: 1;
-        }
-    </style>
 </head>
 
 <body>
     {% include "navbar.html" %}
-    <div class="property-details">
-        <h2>Property Details</h2>
-        <div class="property-card">
-            <img src="https://daisyui.com/images/stock/photo-1494232410401-ad00d5433cfa.jpg" alt="Album"/>
-            <div class="card-body">
-                <h2 class="card-title">{{ property_details[1] }}</h2>
+    <div class="p-10 bg-base-200 rounded box-border">
+        <h2 class="text-2xl">Property Details</h2>
+        <div class="flex items-center mt-5">
+            <img class="w-24 h-24 mr-5" src="https://daisyui.com/images/stock/photo-1494232410401-ad00d5433cfa.jpg" alt="Album" />
+            <div class="flex-grow">
+                <h2 class="text-xl">{{ property_details[1] }}</h2>
                 <p>Located at: {{ property_details[3] }}, {{ property_details[4] }}, {{ property_details[5] }}</p>
             </div>
         </div>
     </div>
-    <a class="btn btn-outline btn-primary m-3" href="/tenantform">
-        Add Tenant
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M12 8V16M16 12L8 12" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"
-                stroke-linejoin="round" />
-            <path
-                d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
-                stroke="#2563EB" stroke-width="1.5" />
-        </svg></a>
+    <div class="flex justify-around items-center mx-3 my-5">
+        <a class="btn btn-outline btn-primary" href="/tenantform">
+            Add Tenant
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 8V16M16 12L8 12" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                <path
+                    d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
+                    stroke="#2563EB" stroke-width="1.5" />
+            </svg>
+        </a>
+        <button class="btn btn-outline btn-error">Delete Tenant</button>
+    </div>
 
-    <h1>Tenant Data</h1>
-
-    <table>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Rent</th>
-            <th>Payment Status</th>
-            <th>Payment Date</th>
-            <th>Update</th>
-        </tr>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-10">
         {% for tenant in tenant_data %}
-        <tr>
-            <td>{{ tenant[0] }}</td>
-            <td>{{ tenant[1] }}</td>
-            <td>{{ tenant[2]}}</td>
-            <td>{{ tenant[3] }}</td>
-            <td>{{ tenant[4] }}</td>
-            <td>
-                <a href="/updatetenant?tenant_name={{ tenant[0] }} {{ tenant[1] }}" class="btn btn-outline btn-md w-full">Edit</a>
-            </td>
-        </tr>
+        <div class="card rounded-lg shadow-lg">
+            <div class="card-body">
+                <figure><img src="https://daisyui.com/images/stock/photo-1494232410401-ad00d5433cfa.jpg" alt="Album"
+                    class="w-24 h-24 rounded-full object-cover" /></figure>
+                <h2 class="card-title text-xl">{{ tenant[0]}} {{ tenant[1] }}</h2>
+                <p>Rent: {{ tenant[2] }}</p>
+                <p>Payment Status: {{ tenant[3] }}</p>
+                <p>Payment Date: {{ tenant[4] }}</p>
+                <div class="card-actions">
+                    <a href="/updatetenant?tenant_name={{ tenant[0] }} {{ tenant[1] }}"
+                        class="btn btn-outline btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </table>
-
-    <div class="card-actions justify-end">
-        <button class="btn btn-outline btn-error m-3">Delete Tenant</button>
     </div>
 
 </body>
