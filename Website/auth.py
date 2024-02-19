@@ -156,11 +156,29 @@ def sortdate():
 def sortname():
     pid=session['pid']
     # Query the database to fetch updated tenant data based on pid
-    cur.execute('''SELECT TFname, TLname, Rent, PaymentStatus, PayDate
+    cur.execute('''SELECT TFname, TLname, Rent, PaymentStatus, PayDate,Tenant.Tid , Lid
                     FROM Tenant
                     JOIN Rent ON Tenant.Tid = Rent.Tid
                     WHERE Pid = %s
                     ORDER BY TFName''', (pid,))
+    tenant_data = cur.fetchall()
+
+    cur.execute('''SELECT *
+                    FROM Property
+                    WHERE Pid = %s''', (pid,))
+    property_details = cur.fetchone()
+
+    # Pass tenant data and property details to the template for rendering
+    return render_template('tenantpage.html', tenant_data=tenant_data, property_details=property_details)
+@auth.route('/sortpaid', methods=['GET', 'POST'])
+def sortpaid():
+    pid=session['pid']
+    # Query the database to fetch updated tenant data based on pid
+    cur.execute('''SELECT TFname, TLname, Rent, PaymentStatus, PayDate,Tenant.Tid , Lid
+                    FROM Tenant
+                    JOIN Rent ON Tenant.Tid = Rent.Tid
+                    WHERE Pid = %s
+                    ORDER BY PaymentStatus desc''', (pid,))
     tenant_data = cur.fetchall()
 
     cur.execute('''SELECT *
