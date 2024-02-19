@@ -13,6 +13,9 @@ except:
     print("issues with connection")
 cur=conn.cursor()
 cur.execute("use rentalManagement")
+with open('schema.sql', 'r') as f:
+    cur.execute(f.read())
+    conn.commit()
 auth= Blueprint('auth',__name__, static_folder='static')
 @auth.route('/base')
 def base():
