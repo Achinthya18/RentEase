@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RentEase</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.2/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/static/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="/static/3.4.1.1.js"></script>
 </head>
 
 <body>
@@ -21,7 +21,7 @@
                 <p class="text-base text-gray-700">Please add property information on RentEase.</p>
             </div>
             <div class="card shrink-0 w-full  shadow-2xl bg-base-100">
-                <form class="card-body" method="post">
+                <form class="card-body" method="post" enctype="multipart/form-data">
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text">Property Category</span>
@@ -57,9 +57,15 @@
                         <input type="text" placeholder="Enter Pin" class="input input-bordered" id="PPin" name="PPin"
                             required />
                     </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Photo</span>
+                        </label>
+                        <input type="file" class="input input-bordered" name="PPhoto" id="PPhoto" accept="image/*" required />
+                    </div>
 
                     <div class="form-control">
-                        <a class="btn btn-primary mr-40 ml-40 mb-2" href="/home">Cancel
+                        <a class="btn btn-primary mr-28 ml-28 mb-2" href="/home">Cancel
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 24"
                                 fill="none">
                                 <path d="M15.7494 15L9.75 9M9.75064 15L15.75 9" stroke="#ffffff" stroke-width="1.5"
@@ -70,7 +76,7 @@
                             </svg>
 
                         </a>
-                        <button class="btn btn-primary  mr-40 ml-40   " href="/home">Next
+                        <button class="btn btn-primary  mr-28 ml-28  " href="/home">Next
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none">
                                 <path d="M20 12L4 12" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"

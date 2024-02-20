@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RentEase</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/static/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="/static/3.4.1.1.js"></script>
 </head>
 
 <body>
@@ -18,7 +18,7 @@
             <img class="w-24 h-24 mr-5" src="{{ url_for('static', filename='property.jpeg') }}" alt="Album" />
             <div class="flex-grow">
                 <h2 class="text-xl">{{ property_details[1] }}</h2>
-                <p>Located at: {{ property_details[3] }}, {{ property_details[4] }}, {{ property_details[5] }}</p>
+                <p>Located at: {{ property_details[2] }}, {{ property_details[3] }}, {{ property_details[4] }}, {{ property_details[5] }}</p>
             </div>
         </div>
     </div>

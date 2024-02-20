@@ -1,5 +1,12 @@
-from flask import Blueprint, render_template,request,flash,redirect,session,url_for
+from flask import Blueprint, Flask, render_template,request,flash,redirect,session,url_for
+import os
+from werkzeug.utils import secure_filename
 import mysql.connector
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'Website/static/upload'
+
+
 try:
     conn=mysql.connector.connect(
         user='root',
@@ -12,10 +19,10 @@ try:
 except:
     print("issues with connection")
 cur=conn.cursor()
-cur.execute("use rentalManagement")
-with open('schema.sql', 'r') as f:
-    cur.execute(f.read())
-    conn.commit()
+cur.execute("use rentalmgmt")
+# with open('schema.sql', 'r') as f:
+#     cur.execute(f.read())
+#     conn.commit()
 auth= Blueprint('auth',__name__, static_folder='static')
 @auth.route('/base')
 def base():
@@ -116,13 +123,20 @@ def propertyform():
             PCity = request.form.get('PCity')
             PState = request.form.get('PState')
             PPin = request.form.get('PPin')
+            PPhoto = request.files['PPhoto']
+
+            if PPhoto:
+                # Save the file to your desired directory
+                photo_filename = secure_filename(PPhoto.filename)
+                photo_path = os.path.join(app.config['UPLOAD_FOLDER'], photo_filename)
+                PPhoto.save(photo_path)
 
             try:
                 # Insert property details into the Property table
                 cur.execute('''INSERT INTO Property
-                                (Lid, PCategory, PLocation, PCity, PState, PPin)
-                                VALUES (%s, %s, %s, %s, %s, %s)''',
-                            (lid, PCategory, PLocation, PCity, PState, PPin))
+                                (Lid, PCategory, PLocation, PCity, PState, PPin, PPhoto)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s)''',
+                            (lid, PCategory, PLocation, PCity, PState, PPin, PPhoto))
                 conn.commit()
                 
                 return redirect('/home')  # Redirect to home page after successful insertion
