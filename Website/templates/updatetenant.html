@@ -8,8 +8,9 @@
     <link href="/static/full.min.css" rel="stylesheet" type="text/css" />
     <script src="/static/3.4.1.1.js"></script>
 </head>
+{% include "navbar.html" %}
 <body>
-    {% include "navbar1.html" %}
+   
     <form class="card-body" method="post">
         <h2 class="text-2xl font-bold mb-4 mt-8">Update Tenant Info</h2>
         <h3 class="text-lg font-semibold mb-4">Current Tenant: {{ tenant_name }}</h3>

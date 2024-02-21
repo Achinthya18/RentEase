@@ -9,8 +9,9 @@
   <link href="/static/full.min.css" rel="stylesheet" type="text/css" />
     <script src="/static/3.4.1.1.js"></script>
 </head>
+{% include "navbar1.html" %}
 <body>
-  {% include "navbar1.html" %}
+
   <a class="btn btn-outline btn-primary m-3" href="/propertyform" >
     Add Property
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -38,7 +39,6 @@
       {% endfor %}
 
     </div>
-
 </body>
 
 </html>

@@ -9,9 +9,9 @@
     <link href="/static/full.min.css" rel="stylesheet" type="text/css" />
     <script src="/static/3.4.1.1.js"></script>
 </head>
-
+{% include "navbar0.html" %}
 <body>
-    {% include "navbar0.html" %}
+    
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}

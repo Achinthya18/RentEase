@@ -19,7 +19,7 @@ try:
 except:
     print("issues with connection")
 cur=conn.cursor()
-cur.execute("use rentalmgmt")
+cur.execute("use rentalmanagement")
 # with open('schema.sql', 'r') as f:
 #     cur.execute(f.read())
 #     conn.commit()
@@ -50,21 +50,28 @@ def signup():
             flash('Passwords do not match.', category='error')
         elif not password1.isalnum():
             flash('Password must contain only alphanumeric characters.', category='error')
-        elif not (phoneNumber.isdigit() ):
+        elif not phoneNumber.isdigit():
             flash('Phone Number must contain only digits.', category='error')
         else:
-            # Input Sanitization and Database Operation
-            try:
-                cur.execute('''INSERT INTO Landlord
-                                (LFname, LLname, LEmail, Lphone, LAddress, LPassword)
-                                VALUES (%s, %s, %s, %s, %s, %s)''',
-                            (firstName, lastName, email, phoneNumber, address, password1))
-                conn.commit()
-                cur.execute("SELECT LAST_INSERT_ID();")
-                lid = cur.fetchone()[0]
-                session['lid'] = lid
-            except Exception as e:
-                conn.rollback()
+            # Check if email already exists in the database
+            cur.execute("SELECT * FROM Landlord WHERE LEmail = %s", (email,))
+            existing_user = cur.fetchone()
+            if existing_user:
+                flash('Email already exists.', category='error')
+            else:
+                # Input Sanitization and Database Operation
+                try:
+                    cur.execute('''INSERT INTO Landlord
+                                    (LFname, LLname, LEmail, Lphone, LAddress, LPassword)
+                                    VALUES (%s, %s, %s, %s, %s, %s)''',
+                                (firstName, lastName, email, phoneNumber, address, password1))
+                    conn.commit()
+                    cur.execute("SELECT LAST_INSERT_ID();")
+                    lid = cur.fetchone()[0]
+                    session['lid'] = lid
+                    return redirect("/home")
+                except Exception as e:
+                    conn.rollback()
     return render_template('signup.html')
 
 @auth.route('/home', methods=['GET', 'POST'])
@@ -123,24 +130,24 @@ def propertyform():
             PCity = request.form.get('PCity')
             PState = request.form.get('PState')
             PPin = request.form.get('PPin')
-            PPhoto = request.files['PPhoto']
+            # PPhoto = request.files['PPhoto']
 
-            if PPhoto:
-                # Save the file to your desired directory
-                photo_filename = secure_filename(PPhoto.filename)
-                photo_path = os.path.join(app.config['UPLOAD_FOLDER'], photo_filename)
-                PPhoto.save(photo_path)
+            # if PPhoto:
+            #     # Save the file to your desired directory
+            #     photo_filename = secure_filename(PPhoto.filename)
+            #     photo_path = os.path.join(app.config['UPLOAD_FOLDER'], photo_filename)
+            #     PPhoto.save(photo_path)
 
             try:
                 # Insert property details into the Property table
                 cur.execute('''INSERT INTO Property
-                                (Lid, PCategory, PLocation, PCity, PState, PPin, PPhoto)
-                                VALUES (%s, %s, %s, %s, %s, %s, %s)''',
-                            (lid, PCategory, PLocation, PCity, PState, PPin, PPhoto))
+                                (Lid, PCategory, PLocation, PCity, PState, PPin)
+                                VALUES (%s, %s, %s, %s, %s, %s)''',
+                            (lid, PCategory, PLocation, PCity, PState, PPin))
                 conn.commit()
-                
                 return redirect('/home')  # Redirect to home page after successful insertion
             except Exception as e:
+                flash(str(e), category='error')
                 conn.rollback()
     return render_template('propertyform.html')
 
@@ -318,3 +325,14 @@ def delete():
 @auth.route('/canceltotenantpage',methods=['GET', 'POST'])
 def cancel():
     return redirect(url_for('auth.tenantpage', pid=session['pid']))
+@auth.route('/profile',methods=['GET', 'POST'])
+def profile():
+    lid=session['lid']
+    cur.execute(''' SELECT LFname,LLname,LEmail,LPhone,LAddress
+                  FROM Landlord
+                        WHERE Lid = %s''',
+                    (lid,))
+    print(lid)
+    landlord_data = cur.fetchone()
+    # print(landlord_data[1])
+    return render_template('profile.html',landlord_data=landlord_data)
