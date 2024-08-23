@@ -18,7 +18,7 @@ app.config["UPLOAD_FOLDER"] = "Website/static/upload"
 
 try:
     conn = mysql.connector.connect(
-        user="root", password="72@Aezakmi36", host="localhost", port="3306"
+        user="root", password="", host="localhost", port="3306"
     )
     if conn.is_connected():
         print("connected")
